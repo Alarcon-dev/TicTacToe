@@ -16,6 +16,19 @@ html, body{
     cursor: pointer;
   }
 
+  .highlight {
+    animation: highlight-animation 300ms ease-in-out infinite alternate;
+  }
+
+  @keyframes highlight-animation {
+    from {
+      background-color: rgb(0, 255, 136);
+    }
+    to {
+      background-color: rgb(0, 238, 255)(0, 119, 255);
+    }
+  }
+
   #message {
     margin-top: 20px;
   }
