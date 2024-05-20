@@ -1,78 +1,85 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let currentPlayer = 'X';
-    const cells = document.querySelectorAll('.cell');
-    const message = document.querySelector('#message');
-    const btnNew = document.querySelector('#btnNew');
-    const messageWin = document.querySelector('#messageWin');
-    
+  let currentPlayer = 'X';
+  const cells = document.querySelectorAll('.cell');
+  const message = document.querySelector('#message');
+  const btnNew = document.querySelector('#btnNew');
+  const messageWin = document.querySelector('#messageWin');
+  
 
-    cells.forEach(cell => cell.addEventListener('click', handleClick));
+  cells.forEach(cell => cell.addEventListener('click', handleClick));
 
-    function handleClick() {
-      if (this.textContent === '-') {
-        this.textContent = currentPlayer;
+  function handleClick() {
+    if (this.textContent === '-') {
+      this.textContent = currentPlayer;
 
-        if (checkWinner(currentPlayer)) {
-          messageWin.textContent = currentPlayer + ' is the winer!';
-          disableBoard();
-          highlightWinner();
-          removeAnimation();
-        } else if (checkDraw()) {
-          message.textContent = 'Both players are tied!';
-          disableBoard();
-        } else {
-          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-          message.textContent = "Turn " + currentPlayer;
-        }
+      if (checkWinner(currentPlayer)) {
+        messageWin.textContent = currentPlayer + ' is the winner!';
+        disableBoard();
+        highlightWinner();
+      } else if (checkDraw()) {
+        message.textContent = 'Both players are tied!';
+        disableBoard();
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        message.textContent = "Turn " + currentPlayer;
       }
     }
+  }
 
-    function checkWinner(player) {
-      const winConditions = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // filas
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // columnas
-        [0, 4, 8], [2, 4, 6]             // diagonales
-      ];
+  function checkWinner(player) {
+    const winConditions = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+      [0, 4, 8], [2, 4, 6]             // diagonals
+    ];
 
-   
+    return winConditions.some(condition =>
+      condition.every(cell => cells[cell].textContent === player)
+    );
+  }
 
-      return winConditions.some(condition =>
-        condition.every(cell => cells[cell].textContent === player)
-      );
-    }
+  function highlightWinner() {
+    const winCondition = getWinningCondition(currentPlayer);
+    winCondition.forEach(cellIndex => {
+      cells[cellIndex].classList.add('highlight');
+    });
+    setTimeout(() => {
+      winCondition.forEach(cellIndex => {
+        cells[cellIndex].classList.remove('highlight');
+      });
+    }, 1000);
+  }
 
-    function highlightWinner() {
+  function getWinningCondition(player) {
+    const winConditions = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+      [0, 4, 8], [2, 4, 6]             // diagonals
+    ];
 
-      setTimeout(()=>{
-        messageWin.classList.add('highlight');
-      }, 600);
-    }
+    return winConditions.find(condition =>
+      condition.every(cell => cells[cell].textContent === player)
+    );
+  }
 
-    const removeAnimation = ()=>{
-      
-      setTimeout(()=>{
-        messageWin.remove('messageWin');
-      }, 3000);
-       
-    }
-    function checkDraw() {
-      return Array.from(cells).every(cell => cell.textContent !== '-');
-    }
+  function checkDraw() {
+    return Array.from(cells).every(cell => cell.textContent !== '-');
+  }
 
-    function disableBoard(){
-      setTimeout(()=>{
-        cells.forEach(cell => cell.textContent = '-');
-        currentPlayer = 'X';
-        message.textContent = '';
-      },1500);
-
-      
-    }
-    
-    btnNew.addEventListener('click', function(){
+  function disableBoard(){
+    setTimeout(()=>{
       cells.forEach(cell => cell.textContent = '-');
       currentPlayer = 'X';
       message.textContent = '';
-    })
+      messageWin.textContent = '';
+    },600);
+  }
+  
+  btnNew.addEventListener('click', function(){
+    cells.forEach(cell => cell.textContent = '-');
+    currentPlayer = 'X';
+    message.textContent = '';
+    document.reload();
+  })
 
-  });
+});
