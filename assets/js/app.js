@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const cells = document.querySelectorAll('.cell');
     const message = document.querySelector('#message');
     const btnNew = document.querySelector('#btnNew');
-    const messageWin = document.querySelector('.messageWin');
+    const messageWin = document.querySelector('#messageWin');
+    
 
     cells.forEach(cell => cell.addEventListener('click', handleClick));
 
@@ -12,16 +13,16 @@ document.addEventListener('DOMContentLoaded', function() {
         this.textContent = currentPlayer;
 
         if (checkWinner(currentPlayer)) {
-          message.textContent = currentPlayer + ' gana!';
+          messageWin.textContent = currentPlayer + ' is the winer!';
           disableBoard();
-          highlightWinner(currentPlayer);
-          location.reload();
+          highlightWinner();
+          removeAnimation();
         } else if (checkDraw()) {
-          message.textContent = 'Empate!';
+          message.textContent = 'Both players are tied!';
           disableBoard();
         } else {
           currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-          message.textContent = "Turno de " + currentPlayer;
+          message.textContent = "Turn " + currentPlayer;
         }
       }
     }
@@ -33,16 +34,27 @@ document.addEventListener('DOMContentLoaded', function() {
         [0, 4, 8], [2, 4, 6]             // diagonales
       ];
 
-      
+   
+
       return winConditions.some(condition =>
         condition.every(cell => cells[cell].textContent === player)
       );
     }
 
     function highlightWinner() {
-      messageWin.classList.add('highlight');
+
+      setTimeout(()=>{
+        messageWin.classList.add('highlight');
+      }, 600);
     }
 
+    const removeAnimation = ()=>{
+      
+      setTimeout(()=>{
+        messageWin.remove('messageWin');
+      }, 3000);
+       
+    }
     function checkDraw() {
       return Array.from(cells).every(cell => cell.textContent !== '-');
     }
@@ -52,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cells.forEach(cell => cell.textContent = '-');
         currentPlayer = 'X';
         message.textContent = '';
-      }, 600);
+      },1500);
 
       
     }
