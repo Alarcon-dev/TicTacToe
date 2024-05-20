@@ -3,7 +3,9 @@ html, body{
     background-color: rgb(218, 23, 104);
     color: white;
 }
-
+.restart{
+    padding: 10px 40px;
+}
 .cell {
     border: 1px solid #ccc;
     width: 100px;
@@ -12,4 +14,8 @@ html, body{
     text-align: center;
     line-height: 100px;
     cursor: pointer;
+  }
+
+  #message {
+    margin-top: 20px;
   }
